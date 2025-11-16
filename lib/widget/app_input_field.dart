@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 class AppInputField extends StatelessWidget {
-  final String labelText;//stsring nise pass korse labeltext e
-  final TextEditingController controller;//controller pass korse user input nite
-  final TextInputType textInputType;//textinput user theke nite
+  final String labelText;
+  final TextEditingController controller;
+  final TextInputType textInputType;
   const AppInputField({
-    required this.controller,//declear
-    required this.labelText,//declear
-    required this.textInputType,//delclear
+    required this.controller,
+    required this.labelText,
+    required this.textInputType,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,//user input
+      controller: controller,
       keyboardType: textInputType,
       decoration: InputDecoration(
           hintText: labelText,
