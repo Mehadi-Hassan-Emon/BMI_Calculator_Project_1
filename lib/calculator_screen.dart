@@ -1,7 +1,7 @@
 import 'package:bmi_project_1/widget/app_input_field.dart';
 import 'package:flutter/material.dart';
 
-enum HeightType{cm,feetInch}//ei widget use hoi bcz bmi calculator e inc naki feet te amra result pacci ta dekhte
+enum HeightType{cm,feetInch}
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -10,43 +10,40 @@ class CalculatorScreen extends StatefulWidget {
   State<CalculatorScreen> createState() => _CalculatorScreenState();
 }
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  HeightType? heightType = HeightType.cm;//heighttype ta cm e dekhabe
+  HeightType? heightType = HeightType.cm;
 
-  final TextEditingController _weightController = TextEditingController();//
+  final TextEditingController _weightController = TextEditingController();
   final TextEditingController _cmHeightController = TextEditingController();
   final TextEditingController _feetHeightController = TextEditingController();
   final TextEditingController _inchHeightController = TextEditingController();
 
-  String _bmiResult = "";//bmi result er jonno ekta string nise
+  String _bmiResult = "";
 
-  String? category;//bmi ta kon category ta jar jonno
-
+  String? category;
   //BMI = weight (kg) / height (meter)²
 
-  //bmi cm dile m e covert korse
-  double? cmToM(){//cm to  meter
-    final cm = double.tryParse(_cmHeightController.text.trim());//cm ta text e nibe
+  double? cmToM(){
+    final cm = double.tryParse(_cmHeightController.text.trim());
     if(cm==null || cm<0) return null;
-    return cm/100.0;//cm to meter e nite 100 diye vhag
+    return cm/100.0;
   }
-  //tai feetinch dile m e covert korse
+  
 double? feetInchToM() {
   final feet = double.tryParse(_feetHeightController.text.trim());
   final inch = double.tryParse(_inchHeightController.text.trim());
   if (feet == null || feet < 0 || inch == null || inch < 0) {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid Data'))); //eitar dileo hobe
-    return null; //eita dileo hobe
-
+        SnackBar(content: Text('Invalid Data')));
+    return null;
   };
-  //feet direct meter e convert korar kono formula nai tai ageh inch e conver hoi then inch er sathe m covert hoy erpor bmi
+ 
   final totalInch = (feet * 12) + inch;
   if(totalInch <=0){
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid Data')));
     return null;
   }
-  return totalInch*0.0254;//inch theke meter e convert bcaz 1 inch =0.0254
+  return totalInch*0.0254;
 }
 //calculation
 void _calculate(){
@@ -56,7 +53,7 @@ void _calculate(){
           SnackBar(content: Text('Invalid Data')));
       return;
     }
-    //jodi ta cmtom naki feettom ageh dibe ta check
+  
     final m = heightType == HeightType.cm? cmToM() :feetInchToM();
     if(m == null){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -64,13 +61,12 @@ void _calculate(){
       return;
     }
     final bmi = weight/(m*m);
-    final cat = categoryResult(bmi);//categoryresult er dekhbe and bmi ta bolbe
+    final cat = categoryResult(bmi);
   setState(() {
-    _bmiResult = bmi.toStringAsFixed(2);//. por 2 ta ghor nivbo pojjonto nibo
+    _bmiResult = bmi.toStringAsFixed(2);
     category = cat;
   });
 }
-//je weight ta dibe ta overweight kina chceck korbo
 String categoryResult (double bmi){
     if(bmi<18.5)return "underweight";
     if(bmi<25)return "Normal";
@@ -99,18 +95,18 @@ String categoryResult (double bmi){
           const SizedBox(height: 8,),
           Text('Height Unit'),
           SegmentedButton<HeightType>(
-              segments:[//heighttype ta list akare dibe
-                ButtonSegment<HeightType>(//button ektai cm
+              segments:[
+                ButtonSegment<HeightType>(
                   label: Text('CM'),
                     value:HeightType.cm
                 ),
-                ButtonSegment<HeightType>(//button arektai kg dekhabe
+                ButtonSegment<HeightType>(
                     label: Text('Feet Inch'),
                     value:HeightType.feetInch
                 )
               ] ,
-              selected: {heightType!},//by default height ta cm e thakbe
-            onSelectionChanged: (value){//onclick e value change
+              selected: {heightType!},
+            onSelectionChanged: (value){
                 setState(() {
                   heightType = value.first;
                 });
